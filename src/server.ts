@@ -1,5 +1,7 @@
 import app from "./app.js"
+import config from "./config/env.js"
 
-app.listen(3000,()=>{
-    console.log("app running ")
+const port = config.port
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`)
 })

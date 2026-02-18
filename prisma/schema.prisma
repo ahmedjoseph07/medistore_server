@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  CUSTOMER
+  SELLER
+  ADMIN
+}
+
+enum OrderStatus {
+  PLACED
+  PROCESSING
+  CANCELLED
+  SHIPPED
+  DELIVERED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  phone     String?  @unique
+  name      String?
+  avatarUrl String?
+  role      UserRole @default(CUSTOMER)
+  isBanned  Boolean  @default(false)
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  medicines Medicine[]
+  orders    Order[]
+  reviews   Review[]
+
+  @@index([role])
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  key       String     @unique // stable slug-like key e.g. "pain-relief-fever"
+  name      String
+  nameBn    String?
+  isActive  Boolean    @default(true)
+  sortOrder Int        @default(0)
+  medicines Medicine[]
+
+  @@index([isActive, sortOrder])
+}
+
+model Medicine {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  sku         String? @unique
+
+  // Category
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  // Seller 
+  sellerId String
+  seller   User   @relation(fields: [sellerId], references: [id], onDelete: Restrict)
+
+  // Pricing & Inventory 
+  price    Decimal @db.Decimal(10, 2)
+  stock    Int     @default(0)
+  isActive Boolean @default(true)
+
+  // Metadata
+  brand      String?
+  dosageForm String?
+  strength   String?
+  imageUrl   String?
+  orderItems OrderItem[]
+  reviews    Review[]
+
+  @@index([categoryId])
+  @@index([sellerId])
+  @@index([isActive])
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  customerId String
+  customer   User        @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  status     OrderStatus @default(PLACED)
+
+  // Totals 
+  subtotal    Decimal @db.Decimal(10, 2)
+  shippingFee Decimal @default(0) @db.Decimal(10, 2)
+  total       Decimal @db.Decimal(10, 2)
+
+  // Contact Info 
+  phone   String?
+  address String?
+
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  medicineId String
+  medicine   Medicine @relation(fields: [medicineId], references: [id], onDelete: Restrict)
+
+  quantity  Int
+  // Price at purchase time 
+  unitPrice Decimal @db.Decimal(10, 2)
+  linePrice Decimal @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@index([medicineId])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  medicineId String
+  medicine   Medicine @relation(fields: [medicineId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  rating  Int
+  comment String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([medicineId, userId])
+  @@index([medicineId])
+  @@index([userId])
+}
