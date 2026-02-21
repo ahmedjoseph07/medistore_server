@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express"
-import { categoryRoutes } from "./modules/categories/category.route"
+import { categoryRoutes } from "./modules/category/category.route"
+import { medicineRoutes } from "./modules/medicine/medicine.route"
 
 const app = express()
 
@@ -14,5 +15,7 @@ app.get("/health", (req: Request, res: Response) => {
 })
 
 app.use("/api/v1", categoryRoutes)
+app.use("/api/v1", medicineRoutes)
+app.use("/api/v1", orderRoutes)
 
 export default app;

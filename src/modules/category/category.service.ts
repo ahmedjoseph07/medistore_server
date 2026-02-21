@@ -1,5 +1,5 @@
 import { prisma } from "../../../lib/prisma"
-import { CreateCategoryInput } from "./category.types"
+import { CreateCategoryInput } from "./category.type"
 
 const createCategory = async (payload: CreateCategoryInput) => {
     const result = await prisma.category.create({
