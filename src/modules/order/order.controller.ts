@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { orderServices } from "./order.service";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../lib/prisma";
 
 const createOrder = async (req: Request, res: Response) => {
     try {
@@ -72,9 +72,30 @@ const updateOrderStatus = async (req: Request, res: Response) => {
     }
 }
 
+const getOrderDetails = async (req: Request, res: Response) => {
+    try {
+        const { orderId } = req.params
+        console.log(orderId)
+        const order = await orderServices.getOrderDetails(orderId as string)
+        console.log("controlerr", order)
+        res.status(200).json({
+            success: true,
+            message: "Order details retrieved successfully",
+            data: order
+        })
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message,
+            details: err
+        })
+    }
+}
+
 export const orderControllers = {
     createOrder,
     getAllOrders,
     getOrdersById,
-    updateOrderStatus
+    updateOrderStatus,
+    getOrderDetails
 }

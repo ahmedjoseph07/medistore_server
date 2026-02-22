@@ -6,5 +6,6 @@ const router = Router()
 router.post("/orders", orderControllers.createOrder)
 router.get("/orders", orderControllers.getAllOrders)
 router.get("/orders/:customerId", orderControllers.getOrdersById)
+router.get("/orders/:orderId/details", orderControllers.getOrderDetails)
 router.patch("/orders/:orderId/status", orderControllers.updateOrderStatus)
 export const orderRoutes = router

@@ -1,5 +1,5 @@
 import { Prisma } from "../../../generated/prisma/client";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../lib/prisma";
 import { CreateOrderPayload, UpdateOrderStatusPayload } from "./order.type";
 
 const createOder = async (payload: CreateOrderPayload) => {
@@ -104,9 +104,20 @@ const updateOrderStatus = async (orderId: string, payload: UpdateOrderStatusPayl
     })
 }
 
+const getOrderDetails = async (orderId: string) => {
+    console.log(orderId)
+    const result = await prisma.order.findUnique({
+        where: { id: orderId },
+        include: { orderItems: true }
+    })
+    console.log(result)
+    return result
+}
+
 export const orderServices = {
     createOder,
     getAllOrders,
     getOrdersById,
-    updateOrderStatus
+    updateOrderStatus,
+    getOrderDetails
 }
