@@ -69,10 +69,20 @@ const getAllMedicines = async () => {
     return result
 }
 
+const getMedicineById = async (medicineId: string) => {
+    const result = await prisma.medicine.findMany({
+        where: {
+            id: medicineId
+        }
+    })
+    return result
+}
+
 export const medicineServices = {
     createMedicine,
     getAllMedicines,
     updateMedicineById,
     deleteMedicineById,
-    getMedicinesBySellerId
+    getMedicinesBySellerId,
+    getMedicineById
 }

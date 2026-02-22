@@ -75,7 +75,25 @@ const deleteMedicineById = async (req: Request, res: Response) => {
 const getAllMedicines = async (req: Request, res: Response) => {
     try {
         const medicines = await medicineServices.getAllMedicines()
-        res.status(201).json({
+        res.status(200).json({
+            success: true,
+            message: "Medicines retrieved successfully",
+            data: medicines
+        })
+    } catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message,
+            details: err
+        })
+    }
+}
+
+const getMedicineById = async (req: Request, res: Response) => {
+    try {
+        const medicineId = req.params.medicineId as string
+        const medicines = await medicineServices.getMedicineById(medicineId)
+        res.status(200).json({
             success: true,
             message: "Medicine retrieved successfully",
             data: medicines
@@ -96,5 +114,6 @@ export const medicineControllers = {
     getAllMedicines,
     updateMedicineById,
     deleteMedicineById,
-    getMedicinesBySellerId
+    getMedicinesBySellerId,
+    getMedicineById
 }

@@ -9,5 +9,6 @@ router.put("/seller/medicines/:medicineId",medicineControllers.updateMedicineByI
 router.delete("/seller/medicines/:medicineId",medicineControllers.deleteMedicineById)
 
 router.get("/medicines",medicineControllers.getAllMedicines)
+router.get("/medicines/:medicineId",medicineControllers.getMedicineById)
 
 export const medicineRoutes = router

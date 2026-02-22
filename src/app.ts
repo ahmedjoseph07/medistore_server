@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express"
 import { categoryRoutes } from "./modules/category/category.route"
 import { medicineRoutes } from "./modules/medicine/medicine.route"
+import { orderRoutes } from "./modules/order/order.route"
 
 const app = express()
 
