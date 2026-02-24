@@ -30,7 +30,6 @@ export const auth = betterAuth({
         sendVerificationEmail: async ({ user, url, token }, request) => {
             try {
                 const verificationUrl = `${config.app_url}/api/auth/verify-email?token=${token}`;
-
                 const info = await transporter.sendMail({
                     from: '"Medistore" <medistore@support.com>',
                     to: user.email,
@@ -43,6 +42,12 @@ export const auth = betterAuth({
                 console.error(err)
                 throw err
             }
+        }
+    },
+    socialProviders: {
+        google: {
+            clientId: config.client_id as string,
+            clientSecret: config.client_secret as string
         }
     }
 
