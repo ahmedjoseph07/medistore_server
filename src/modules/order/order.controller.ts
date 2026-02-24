@@ -4,7 +4,8 @@ import { prisma } from "../../lib/prisma";
 
 const createOrder = async (req: Request, res: Response) => {
     try {
-        const medicine = await orderServices.createOder(req.body)
+        const userId = req.user?.id as string
+        const medicine = await orderServices.createOder(req.body, userId)
         res.status(201).json({
             success: true,
             message: "Order created successfully",

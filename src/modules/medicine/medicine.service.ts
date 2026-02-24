@@ -2,25 +2,13 @@ import { prisma } from "../../lib/prisma"
 import { Medicine } from "./medicine.type"
 
 
-const createMedicine = async (payload: Medicine) => {
-    const { brand,
-        categoryId,
-        description,
-        dosageForm,
-        imageUrl,
-        isActive,
-        name,
-        price,
-        sellerId,
-        sku,
-        stock,
-        strength } = payload
+const createMedicine = async (payload: Medicine, sellerId: string) => {
 
     const result = await prisma.medicine.create({
         data: {
             name: payload.name,
             categoryId: payload.categoryId,
-            sellerId: payload.sellerId,
+            sellerId,
             description: payload.description,
             brand: payload.brand,
             price: payload.price,

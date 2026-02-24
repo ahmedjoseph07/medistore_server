@@ -5,7 +5,7 @@ import { authMiddleware, UserRole } from "../../middlewares/authMiddleware";
 
 const router = Router();
 
-router.post("/categories", categoryControllers.createCategory)
-router.get("/categories", authMiddleware(UserRole.CUSTOMER), categoryControllers.getCategories)
+router.post("/categories", authMiddleware(UserRole.ADMIN), categoryControllers.createCategory)
+router.get("/categories", authMiddleware(UserRole.ADMIN), categoryControllers.getCategories)
 
 export const categoryRoutes = router

@@ -2,7 +2,7 @@ import { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { CreateOrderPayload, UpdateOrderStatusPayload } from "./order.type";
 
-const createOder = async (payload: CreateOrderPayload) => {
+const createOder = async (payload: CreateOrderPayload, userId: string) => {
     const shippingFee = payload.shippingFee ?? 0;
 
     // Loading Medicines
@@ -49,7 +49,7 @@ const createOder = async (payload: CreateOrderPayload) => {
     return prisma.$transaction(async (tx) => {
         const order = await tx.order.create({
             data: {
-                customerId: payload.customerId,
+                customerId: userId,
                 status: "PLACED",
                 subtotal,
                 shippingFee: new Prisma.Decimal(shippingFee),

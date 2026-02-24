@@ -3,7 +3,8 @@ import { medicineServices } from "./medicine.service";
 
 const createMedicine = async (req: Request, res: Response) => {
     try {
-        const medicine = await medicineServices.createMedicine(req.body)
+        const sellerId = req.user?.id as string
+        const medicine = await medicineServices.createMedicine(req.body, sellerId)
         res.status(201).json({
             success: true,
             message: "Medicine created successfully",

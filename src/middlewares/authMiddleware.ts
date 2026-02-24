@@ -9,7 +9,7 @@ declare global {
                 email: string,
                 name: string,
                 role: string,
-                emailVarified: boolean
+                emailVerified: boolean
             }
         }
     }
@@ -46,7 +46,7 @@ export const authMiddleware = (...roles: UserRole[]) => {
             email: session.user.email,
             name: session.user.name,
             role: session.user.role,
-            emailVarified: session.user.emailVerified
+            emailVerified: session.user.emailVerified
         }
         if (roles.length && !roles.includes(req.user.role as UserRole)) {
             return res.status(403).json({
