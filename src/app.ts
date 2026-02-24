@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express"
-import { categoryRoutes } from "./modules/category/category.route"
-import { medicineRoutes } from "./modules/medicine/medicine.route"
-import { orderRoutes } from "./modules/order/order.route"
+import { categoryRoutes } from "./modules/category/category.route.js"
+import { medicineRoutes } from "./modules/medicine/medicine.route.js"
+import { orderRoutes } from "./modules/order/order.route.js"
 import { toNodeHandler } from "better-auth/node"
 import cors from "cors"
-import { auth } from "./lib/auth"
-import config from "./config/env"
+import { auth } from "./lib/auth.js"
+import config from "./config/env.js"
 
 const app = express()
 

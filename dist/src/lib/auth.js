@@ -1,10 +1,9 @@
-import { betterAuth} from "better-auth";
+import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
 import config from "../config/env.js";
 import { getVerificationEmailTemplate } from "./emailVerificationTemplate.js";
-
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -14,7 +13,6 @@ const transporter = nodemailer.createTransport({
         pass: config.app_pass,
     },
 });
-
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql",
@@ -32,7 +30,7 @@ export const auth = betterAuth({
             }
         }
     },
-    trustedOrigins: [process.env.APP_URL!],
+    trustedOrigins: [process.env.APP_URL],
     emailAndPassword: {
         enabled: true,
         autoSignIn: false,
@@ -51,10 +49,10 @@ export const auth = betterAuth({
                     text: `Verify your email: ${verificationUrl}`,
                     html: getVerificationEmailTemplate(verificationUrl, user.name),
                 });
-
-            } catch (err) {
-                console.error(err)
-                throw err
+            }
+            catch (err) {
+                console.error(err);
+                throw err;
             }
         }
     },
@@ -62,9 +60,8 @@ export const auth = betterAuth({
         google: {
             prompt: "select_account consent",
             accessType: "offline",
-            clientId: config.client_id as string,
-            clientSecret: config.client_secret as string
+            clientId: config.client_id,
+            clientSecret: config.client_secret
         }
     }
-
 });

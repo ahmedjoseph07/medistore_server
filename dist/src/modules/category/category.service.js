@@ -1,7 +1,5 @@
-import { prisma } from "../../lib/prisma.js"
-import { CreateCategoryInput } from "./category.type.js"
-
-const createCategory = async (payload: CreateCategoryInput) => {
+import { prisma } from "../../lib/prisma.js";
+const createCategory = async (payload) => {
     const result = await prisma.category.create({
         data: {
             key: payload.key,
@@ -10,17 +8,14 @@ const createCategory = async (payload: CreateCategoryInput) => {
             isActive: payload.isActive ?? true,
             ...(payload.nameBn !== undefined ? { nameBn: payload.nameBn } : {})
         },
-    })
-    return result
-}
-
+    });
+    return result;
+};
 const getCategories = async () => {
-    const result = await prisma.category.findMany()
-    return result
-}
-
-
+    const result = await prisma.category.findMany();
+    return result;
+};
 export const categoryServices = {
     createCategory,
     getCategories
-}
+};

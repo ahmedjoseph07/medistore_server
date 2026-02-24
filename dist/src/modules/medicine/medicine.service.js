@@ -1,9 +1,5 @@
-import { prisma } from "../../lib/prisma.js"
-import { Medicine } from "./medicine.type.js"
-
-
-const createMedicine = async (payload: Medicine, sellerId: string) => {
-
+import { prisma } from "../../lib/prisma.js";
+const createMedicine = async (payload, sellerId) => {
     const result = await prisma.medicine.create({
         data: {
             name: payload.name,
@@ -19,53 +15,46 @@ const createMedicine = async (payload: Medicine, sellerId: string) => {
             sku: payload.sku,
             strength: payload.strength
         }
-    })
-    return result
-}
-
-const getMedicinesBySellerId = async (sellerId: string) => {
+    });
+    return result;
+};
+const getMedicinesBySellerId = async (sellerId) => {
     const result = await prisma.medicine.findMany({
         where: {
             sellerId
         }
-    })
-
-    return result
-}
-
-const updateMedicineById = async (medicineId: string, payload: Partial<Medicine>) => {
+    });
+    return result;
+};
+const updateMedicineById = async (medicineId, payload) => {
     const result = await prisma.medicine.update({
         where: {
             id: medicineId
         },
         data: payload
-    })
-    return result
-}
-
-const deleteMedicineById = async (medicineId: string) => {
+    });
+    return result;
+};
+const deleteMedicineById = async (medicineId) => {
     const result = await prisma.medicine.delete({
         where: {
             id: medicineId
         }
-    })
-    return result
-}
-
+    });
+    return result;
+};
 const getAllMedicines = async () => {
-    const result = await prisma.medicine.findMany()
-    return result
-}
-
-const getMedicineById = async (medicineId: string) => {
+    const result = await prisma.medicine.findMany();
+    return result;
+};
+const getMedicineById = async (medicineId) => {
     const result = await prisma.medicine.findMany({
         where: {
             id: medicineId
         }
-    })
-    return result
-}
-
+    });
+    return result;
+};
 export const medicineServices = {
     createMedicine,
     getAllMedicines,
@@ -73,4 +62,4 @@ export const medicineServices = {
     deleteMedicineById,
     getMedicinesBySellerId,
     getMedicineById
-}
+};

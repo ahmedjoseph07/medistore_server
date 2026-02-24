@@ -1,115 +1,111 @@
-import { Request, Response } from "express";
 import { medicineServices } from "./medicine.service.js";
-
-const createMedicine = async (req: Request, res: Response) => {
+const createMedicine = async (req, res) => {
     try {
-        const sellerId = req.user?.id as string
-        const medicine = await medicineServices.createMedicine(req.body, sellerId)
+        const sellerId = req.user?.id;
+        const medicine = await medicineServices.createMedicine(req.body, sellerId);
         res.status(201).json({
             success: true,
             message: "Medicine created successfully",
             data: medicine
-        })
-    } catch (err: any) {
+        });
+    }
+    catch (err) {
         res.status(500).json({
             success: false,
             message: err.message,
             details: err
-        })
+        });
     }
-}
-
-const getMedicinesBySellerId = async (req: Request, res: Response) => {
+};
+const getMedicinesBySellerId = async (req, res) => {
     try {
-        const sellerId = req.params.sellerId as string
-        const medicines = await medicineServices.getMedicinesBySellerId(sellerId)
+        const sellerId = req.params.sellerId;
+        const medicines = await medicineServices.getMedicinesBySellerId(sellerId);
         res.status(200).json({
             success: true,
             message: "Medicine retrieved successfully",
             data: medicines
-        })
-    } catch (err: any) {
+        });
+    }
+    catch (err) {
         res.status(500).json({
             success: false,
             message: err.message,
             details: err
-        })
+        });
     }
-}
-
-const updateMedicineById = async (req: Request, res: Response) => {
+};
+const updateMedicineById = async (req, res) => {
     try {
-        const { medicineId } = req.params
-        const medicines = await medicineServices.updateMedicineById(medicineId as string, req.body)
+        const { medicineId } = req.params;
+        const medicines = await medicineServices.updateMedicineById(medicineId, req.body);
         res.status(200).json({
             success: true,
             message: "Medicine updated successfully",
             data: medicines
-        })
-    } catch (err: any) {
+        });
+    }
+    catch (err) {
         res.status(500).json({
             success: false,
             message: err.message,
             details: err
-        })
+        });
     }
-}
-
-const deleteMedicineById = async (req: Request, res: Response) => {
+};
+const deleteMedicineById = async (req, res) => {
     try {
-        const { medicineId } = req.params
-        const medicines = await medicineServices.deleteMedicineById(medicineId as string)
+        const { medicineId } = req.params;
+        const medicines = await medicineServices.deleteMedicineById(medicineId);
         res.status(200).json({
             success: true,
             message: "Medicine deleted successfully",
             data: medicines
-        })
-    } catch (err: any) {
+        });
+    }
+    catch (err) {
         res.status(500).json({
             success: false,
             message: err.message,
             details: err
-        })
+        });
     }
-}
-
-const getAllMedicines = async (req: Request, res: Response) => {
+};
+const getAllMedicines = async (req, res) => {
     try {
-        const medicines = await medicineServices.getAllMedicines()
+        const medicines = await medicineServices.getAllMedicines();
         res.status(200).json({
             success: true,
             message: "Medicines retrieved successfully",
             data: medicines
-        })
-    } catch (err: any) {
+        });
+    }
+    catch (err) {
         res.status(500).json({
             success: false,
             message: err.message,
             details: err
-        })
+        });
     }
-}
-
-const getMedicineById = async (req: Request, res: Response) => {
+};
+const getMedicineById = async (req, res) => {
     try {
-        const medicineId = req.params.medicineId as string
-        const medicines = await medicineServices.getMedicineById(medicineId)
+        const medicineId = req.params.medicineId;
+        const medicines = await medicineServices.getMedicineById(medicineId);
         res.status(200).json({
             success: true,
             message: "Medicine retrieved successfully",
             data: medicines
-        })
-    } catch (err: any) {
+        });
+    }
+    catch (err) {
         res.status(500).json({
             success: false,
             message: err.message,
             details: err
-        })
+        });
     }
-}
-
-
-
+};
 export const medicineControllers = {
     createMedicine,
     getAllMedicines,
@@ -117,4 +113,4 @@ export const medicineControllers = {
     deleteMedicineById,
     getMedicinesBySellerId,
     getMedicineById
-}
+};
