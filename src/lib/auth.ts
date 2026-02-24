@@ -19,6 +19,19 @@ export const auth = betterAuth({
     database: prismaAdapter(prisma, {
         provider: "postgresql",
     }),
+    user: {
+        additionalFields: {
+            role: {
+                type: "string"
+            },
+            phone: {
+                type: "string"
+            },
+            isBanned: {
+                type: "boolean"
+            }
+        }
+    },
     trustedOrigins: [process.env.APP_URL!],
     emailAndPassword: {
         enabled: true,
@@ -27,6 +40,7 @@ export const auth = betterAuth({
     },
     emailVerification: {
         sendOnSignUp: true,
+        autoSignInAfterVerification: true,
         sendVerificationEmail: async ({ user, url, token }, request) => {
             try {
                 const verificationUrl = `${config.app_url}/api/auth/verify-email?token=${token}`;
@@ -46,6 +60,8 @@ export const auth = betterAuth({
     },
     socialProviders: {
         google: {
+            prompt: "select_account consent",
+            accessType: "offline",
             clientId: config.client_id as string,
             clientSecret: config.client_secret as string
         }

@@ -20,8 +20,9 @@ const createCategory = async (req: Request, res: Response) => {
 
 const getCategories = async (req: Request, res: Response) => {
     try {
+        console.log(req.user)
         const categories = await categoryServices.getCategories()
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             message: "Category retrieved successfully",
             data: categories
