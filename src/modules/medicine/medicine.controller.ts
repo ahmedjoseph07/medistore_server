@@ -75,7 +75,11 @@ const deleteMedicineById = async (req: Request, res: Response) => {
 
 const getAllMedicines = async (req: Request, res: Response) => {
     try {
-        const medicines = await medicineServices.getAllMedicines()
+        const { search } = req.query
+        const searchString = typeof search === 'string' ? search : undefined
+        const medicines = await medicineServices.getAllMedicines({
+            search: searchString
+        })
         res.status(200).json({
             success: true,
             message: "Medicines retrieved successfully",

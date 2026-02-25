@@ -52,8 +52,15 @@ const deleteMedicineById = async (medicineId: string) => {
     return result
 }
 
-const getAllMedicines = async () => {
-    const result = await prisma.medicine.findMany()
+const getAllMedicines = async (payload: { search?: string | undefined }) => {
+    const result = await prisma.medicine.findMany({
+        where: {
+            name: {
+                contains: payload.search as string,
+                mode: "insensitive"
+            }
+        }
+    })
     return result
 }
 
