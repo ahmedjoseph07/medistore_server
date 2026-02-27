@@ -75,11 +75,24 @@ const deleteMedicineById = async (req: Request, res: Response) => {
 
 const getAllMedicines = async (req: Request, res: Response) => {
     try {
-        const { search } = req.query
+        const { search, dosageForm, brand, minPrice, maxPrice } = req.query
+        console.log(req.query)
+        const dosageFormString = typeof dosageForm === 'string' ? dosageForm : undefined
         const searchString = typeof search === 'string' ? search : undefined
+        const brandString = typeof brand === 'string' ? brand : undefined
+        const isActive = req.query.isActive ? req.query.isActive === 'true' : undefined
+        const minPriceNumber = typeof minPrice === "string" && minPrice.trim() !== "" && !Number.isNaN(Number(minPrice)) ? Number(minPrice) : undefined
+        const maxPriceNumber = typeof maxPrice === "string" && maxPrice.trim() !== "" && !Number.isNaN(Number(maxPrice)) ? Number(maxPrice) : undefined
+
         const medicines = await medicineServices.getAllMedicines({
-            search: searchString
+            search: searchString,
+            dosageForm: dosageFormString,
+            brand: brandString,
+            isActive,
+            minPrice: minPriceNumber,
+            maxPrice: maxPriceNumber
         })
+
         res.status(200).json({
             success: true,
             message: "Medicines retrieved successfully",
