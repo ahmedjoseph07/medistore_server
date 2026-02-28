@@ -1,8 +1,6 @@
 import { prisma } from "../../lib/prisma.js"
 import { Medicine } from "./medicine.type.js"
 import { MedicineWhereInput } from "../../../generated/prisma/models.js"
-import { ADDRCONFIG } from "node:dns"
-
 
 const createMedicine = async (payload: Medicine, sellerId: string) => {
 
@@ -61,9 +59,13 @@ const getAllMedicines = async (payload: {
     isActive?: boolean | undefined,
     minPrice?: number | undefined,
     maxPrice?: number | undefined
+    page: number,
+    limit: number
 }) => {
-    const { search, dosageForm, brand, isActive, minPrice, maxPrice } = payload
+    const { search, dosageForm, brand, isActive, minPrice, maxPrice, page, limit } = payload
     const andConditions: MedicineWhereInput[] = []
+
+    // Searching
     if (search) {
         andConditions.push({
             OR: [
@@ -88,6 +90,8 @@ const getAllMedicines = async (payload: {
             ]
         })
     }
+
+    // Filtering
     if (dosageForm) {
         andConditions.push({
             dosageForm: {
@@ -96,7 +100,6 @@ const getAllMedicines = async (payload: {
             }
         })
     }
-
     if (brand) {
         andConditions.push({
             brand: {
@@ -105,13 +108,11 @@ const getAllMedicines = async (payload: {
             }
         })
     }
-
     if (typeof isActive === 'boolean') {
         andConditions.push({
             isActive
         })
     }
-
     if (typeof minPrice === "number" || typeof maxPrice === "number") {
         andConditions.push({
             price: {
@@ -120,8 +121,13 @@ const getAllMedicines = async (payload: {
             },
         })
     }
-    
+
+    // Pagination 
+    const skip = (page - 1) * limit
+
     const result = await prisma.medicine.findMany({
+        take: limit,
+        skip,
         where: {
             AND: andConditions
         }

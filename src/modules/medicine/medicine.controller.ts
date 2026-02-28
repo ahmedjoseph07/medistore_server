@@ -84,13 +84,18 @@ const getAllMedicines = async (req: Request, res: Response) => {
         const minPriceNumber = typeof minPrice === "string" && minPrice.trim() !== "" && !Number.isNaN(Number(minPrice)) ? Number(minPrice) : undefined
         const maxPriceNumber = typeof maxPrice === "string" && maxPrice.trim() !== "" && !Number.isNaN(Number(maxPrice)) ? Number(maxPrice) : undefined
 
+        const page = Number(req.query.page ?? 1)
+        const limit = Number(req.query.limit ?? 10)
+
         const medicines = await medicineServices.getAllMedicines({
             search: searchString,
             dosageForm: dosageFormString,
             brand: brandString,
             isActive,
             minPrice: minPriceNumber,
-            maxPrice: maxPriceNumber
+            maxPrice: maxPriceNumber,
+            limit,
+            page,
         })
 
         res.status(200).json({
