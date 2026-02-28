@@ -60,11 +60,16 @@ const getAllMedicines = async (payload: {
     minPrice?: number | undefined,
     maxPrice?: number | undefined
     page: number,
-    limit: number
+    limit: number,
+    sortBy?: string | undefined,
+    sortOrder?: string | undefined,
+    skip: number
 }) => {
-    const { search, dosageForm, brand, isActive, minPrice, maxPrice, page, limit } = payload
+    const { search, dosageForm, brand, isActive, minPrice, maxPrice, limit, skip } = payload
     const andConditions: MedicineWhereInput[] = []
 
+    const sortBy = payload.sortBy as string
+    const sortOrder = payload.sortOrder as string
     // Searching
     if (search) {
         andConditions.push({
@@ -90,7 +95,6 @@ const getAllMedicines = async (payload: {
             ]
         })
     }
-
     // Filtering
     if (dosageForm) {
         andConditions.push({
@@ -122,15 +126,18 @@ const getAllMedicines = async (payload: {
         })
     }
 
-    // Pagination 
-    const skip = (page - 1) * limit
-
     const result = await prisma.medicine.findMany({
         take: limit,
         skip,
         where: {
             AND: andConditions
-        }
+        },
+        orderBy: [
+            {
+                [sortBy]: sortOrder
+            }
+        ]
+
     })
     return result
 }

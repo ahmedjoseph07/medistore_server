@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { medicineServices } from "./medicine.service.js";
+import paginationSortingHelper from "../../helpers/paginationSortingHelper.js";
 
 const createMedicine = async (req: Request, res: Response) => {
     try {
@@ -76,7 +77,6 @@ const deleteMedicineById = async (req: Request, res: Response) => {
 const getAllMedicines = async (req: Request, res: Response) => {
     try {
         const { search, dosageForm, brand, minPrice, maxPrice } = req.query
-        console.log(req.query)
         const dosageFormString = typeof dosageForm === 'string' ? dosageForm : undefined
         const searchString = typeof search === 'string' ? search : undefined
         const brandString = typeof brand === 'string' ? brand : undefined
@@ -84,8 +84,7 @@ const getAllMedicines = async (req: Request, res: Response) => {
         const minPriceNumber = typeof minPrice === "string" && minPrice.trim() !== "" && !Number.isNaN(Number(minPrice)) ? Number(minPrice) : undefined
         const maxPriceNumber = typeof maxPrice === "string" && maxPrice.trim() !== "" && !Number.isNaN(Number(maxPrice)) ? Number(maxPrice) : undefined
 
-        const page = Number(req.query.page ?? 1)
-        const limit = Number(req.query.limit ?? 10)
+        const { page, limit, skip, sortBy, sortOrder } = paginationSortingHelper(req.query)
 
         const medicines = await medicineServices.getAllMedicines({
             search: searchString,
@@ -96,6 +95,9 @@ const getAllMedicines = async (req: Request, res: Response) => {
             maxPrice: maxPriceNumber,
             limit,
             page,
+            sortBy,
+            sortOrder,
+            skip
         })
 
         res.status(200).json({
