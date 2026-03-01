@@ -6,6 +6,7 @@ import { toNodeHandler } from "better-auth/node"
 import cors from "cors"
 import { auth } from "./lib/auth.js"
 import config from "./config/env.js"
+import { reviewRoutes } from "./modules/review/review.route.js"
 
 const app = express()
 
@@ -30,5 +31,6 @@ app.get("/health", (req: Request, res: Response) => {
 app.use("/api/v1", categoryRoutes)
 app.use("/api/v1", medicineRoutes)
 app.use("/api/v1", orderRoutes)
+app.use("/api/v1", reviewRoutes)
 
 export default app;

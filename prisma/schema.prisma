@@ -154,8 +154,7 @@ model Review {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@unique([medicineId, userId])
+  
   @@index([medicineId])
   @@index([userId])
 }
