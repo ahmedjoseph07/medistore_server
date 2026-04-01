@@ -11,7 +11,7 @@ import { reviewRoutes } from "./modules/review/review.route.js"
 const app = express()
 
 app.use(cors({
-    origin: config.app_url || "http://localhost:4000",
+    origin: config.app_url || "http://localhost:3000",
     credentials: true
 
 }))
